@@ -96,9 +96,7 @@ jobs:
 ```
 
 > [!IMPORTANT]
-> By default, the XPS value is 1000, it must be overridden at the final review stage by adding a comment in the review in the format `XPS=N`, where `N` is a positive integer from 1 to 15000
-
-
+> By default, the XPS value is 1000, it must be overridden at the final review stage by adding a comment in the review in the format `XPS=N`, where `N` is a positive integer from 0 to 15000, if the value is 0, no reward is given
 
 ## Development
 

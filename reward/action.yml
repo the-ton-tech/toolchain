@@ -50,9 +50,13 @@ runs:
           let xps = '';
           for (const r of reviews.data) {
             if (!r.body) continue;
-            const m = r.body.match(/XPS\s*=\s*(\d{1,5})/i);
+            const m = r.body.match(/XPS\s*=\s*(-?\d{1,5})/i);
             if (!m) continue;
             const n = parseInt(m[1], 10);
+            if (n === 0) {
+              xps = '0';
+              break;
+            }
             if (n < 1 || n > 15000) {
               core.warning(`Found XPS outside 1–15000: ${n}, skipping`);
               continue;
@@ -74,14 +78,15 @@ runs:
       run: |
         # take reviewer-specified or default to 1000
         XPS="${{ steps.extract_xps.outputs.xps }}"
-        if [ -z "$XPS" ]; then
+        if [ "$XPS" = "" ]; then
           echo "xps=1000" >> $GITHUB_OUTPUT
         else
           echo "xps=$XPS" >> $GITHUB_OUTPUT
         fi
 
+    # Issue the reward (skip if XPS=0)
     - name: Issue SBT reward
-      if: ${{ github.event.pull_request.merged == true }}
+      if: ${{ github.event.pull_request.merged == true && steps.final_xps.outputs.xps != '0' }}
       uses: ton-society/github-allowlist-action@3b4b07bbc9ee3243470e06c9fa6e0eab82ff2d22
       with:
         activity_id:       ${{ steps.map_project.outputs.activity_id }}
