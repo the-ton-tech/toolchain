@@ -13,6 +13,24 @@ yarn add -D https://github.com/the-ton-tech/toolchain
 export { default } from '@ton/toolchain';
 ```
 
+**custom eslint.config.mjs**
+```js
+import base, { tsEslint } from '@ton/toolchain';
+
+export default [
+  ...base,
+  {
+    plugins: {
+      '@typescript-eslint': tsEslint,
+    },
+    rules: {
+      'no-console': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+];
+```
+
 **package.json**
 ```json
 {
@@ -41,7 +59,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: the-ton-tech/toolchain/lint@v1.0.0
+      - uses: the-ton-tech/toolchain/lint@v1
         with:
           node-version: 22.x
 
@@ -50,7 +68,7 @@ jobs:
     needs: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: the-ton-tech/toolchain/build@v1.0.0
+      - uses: the-ton-tech/toolchain/build@v1
         with:
           node-version: 22.x
 ```

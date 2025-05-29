@@ -1,13 +1,7 @@
-import js from '@eslint/js';
-import tsEslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
-import importPlugin from 'eslint-plugin-import';
-import prettierPlugin from 'eslint-plugin-prettier';
-import jestPlugin from 'eslint-plugin-jest';
-import globals from 'globals';
+import { js, tsEslint, tsParser, importPlugin, prettierPlugin, jestPlugin, globals } from './eslint.mjs';
 const nodeGlobals = globals.node;
 export default [
-    { ignores: ['coverage/**', '**/coverage/**'] },
+    { ignores: ['dist/**', '**/dist/**', 'build/**', '**/build/**', 'coverage/**', '**/coverage/**'] },
     {
         languageOptions: {
             globals: nodeGlobals,
