@@ -84,12 +84,15 @@ on:
 
 jobs:
   reward:
-    uses: the-ton-tech/toolchain/reward@v1
-    with:
-      project: blueprint # or sandbox or tl-b 
-      github_token: ${{ secrets.GITHUB_TOKEN }}
-      x_api_key:    ${{ secrets.X_API_KEY }}
-      x_partner_id: ${{ secrets.X_PARTNER_ID }}
+    name: Reward
+    runs-on: ubuntu-latest
+    steps:
+      - uses: the-ton-tech/toolchain/reward@v1
+        with:
+          project: blueprint # or sandbox or tl-b 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          x_api_key:    ${{ secrets.X_API_KEY }}
+          x_partner_id: ${{ secrets.X_PARTNER_ID }}
 ```
 
 > [!IMPORTANT]
