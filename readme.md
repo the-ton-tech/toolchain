@@ -73,6 +73,29 @@ jobs:
           node-version: 22.x
 ```
 
+**.github/workflows/reward.yaml**
+```yaml
+name: Reward
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  reward:
+    uses: the-ton-tech/toolchain/reward@v1
+    with:
+      project: blueprint # or sandbox or tl-b 
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+      x_api_key:    ${{ secrets.X_API_KEY }}
+      x_partner_id: ${{ secrets.X_PARTNER_ID }}
+```
+
+> [!IMPORTANT]
+> By default, the XPS value is 1000, it must be overridden at the final review stage by adding a comment in the review in the format `XPS=N`, where `N` is a positive integer from 1 to 15000
+
+
 
 ## Development
 

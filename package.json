@@ -17,6 +17,7 @@
   "files": [
     "lint/**",
     "build/**",
+    "reward/**",
     "prettier.mjs",
     "eslint.config.mjs"
   ],

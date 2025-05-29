@@ -1,0 +1,92 @@
+name: 'SBT Reward on PR Merge'
+description: 'Awards user SBT reward for merged PR'
+
+inputs:
+  project:
+    description: >
+      Target project for reward:
+      - "blueprint" or "sandbox" → activity_id=9747
+      - "tl-b" or "toolchain"  → activity_id=9745
+    required: true
+  github_token:
+    description: 'GitHub token (GITHUB_TOKEN)'
+    required: true
+  x_api_key:
+    description: 'X-API-KEY'
+    required: true
+  x_partner_id:
+    description: 'X-PARTNER-ID'
+    required: true
+
+runs:
+  using: composite
+  steps:
+
+    - name: Map project to activity_id
+      id: map_project
+      if: ${{ github.event.pull_request.merged == true }}
+      shell: bash
+      run: |
+        case "${{ inputs.project }}" in
+          blueprint|sandbox)
+            echo "activity_id=9747" >> $GITHUB_OUTPUT ;;
+          tl-b|toolchain)
+            echo "activity_id=9745" >> $GITHUB_OUTPUT ;;
+          *)
+            echo "❌ Unknown project: ${{ inputs.project }}" >&2
+            exit 1 ;;
+        esac
+
+    - name: Extract XPS from reviewer comments if provided
+      id: extract_xps
+      if: ${{ github.event.pull_request.merged == true }}
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const { owner, repo } = context.repo;
+          const pr = context.payload.pull_request.number;
+          const reviews = await github.rest.pulls.listReviews({ owner, repo, pull_number: pr });
+          let xps = '';
+          for (const r of reviews.data) {
+            if (!r.body) continue;
+            const m = r.body.match(/XPS\s*=\s*(\d{1,5})/i);
+            if (!m) continue;
+            const n = parseInt(m[1], 10);
+            if (n < 1 || n > 15000) {
+              core.warning(`Found XPS outside 1–15000: ${n}, skipping`);
+              continue;
+            }
+            // ensure reviewer has write/maintain/admin permission
+            const permRes = await github.rest.repos.getCollaboratorPermissionLevel({ owner, repo, username: r.user.login });
+            const perm = permRes.data.permission;
+            if (['admin','maintain','write'].includes(perm)) {
+              xps = String(n);
+              break;
+            }
+          }
+          core.setOutput('xps', xps);
+
+    - name: Consolidate XPS default to 1000 if none provided
+      id: final_xps
+      if: ${{ github.event.pull_request.merged == true }}
+      shell: bash
+      run: |
+        # take reviewer-specified or default to 1000
+        XPS="${{ steps.extract_xps.outputs.xps }}"
+        if [ -z "$XPS" ]; then
+          echo "xps=1000" >> $GITHUB_OUTPUT
+        else
+          echo "xps=$XPS" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Issue SBT reward
+      if: ${{ github.event.pull_request.merged == true }}
+      uses: ton-society/github-allowlist-action@3b4b07bbc9ee3243470e06c9fa6e0eab82ff2d22
+      with:
+        activity_id:       ${{ steps.map_project.outputs.activity_id }}
+        github_pr_number:  ${{ github.event.pull_request.number }}
+        github_token:      ${{ inputs.github_token }}
+        x_api_key:         ${{ inputs.x_api_key }}
+        x_partner_id:      ${{ inputs.x_partner_id }}
+        xps:               ${{ steps.final_xps.outputs.xps }}
