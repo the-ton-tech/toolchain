@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased] – YYYY-MM-DD
+
+- Added calculation average reward action `toolchain/reward` and applies a label to the pull request if specified
+
 ## [1.2.0] - 2025-05-29
 
 - Added logic to the reward SBT action to skip reward issuance when XPS=0

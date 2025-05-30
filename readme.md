@@ -42,6 +42,10 @@ export default [
 }
 ```
 
+## GitHub Actions
+
+### QA
+
 **.github/workflows/qa.yaml**
 ```yaml
 name: QA
@@ -73,6 +77,13 @@ jobs:
           node-version: 22.x
 ```
 
+### SBT Reward
+
+This action extracts the average XPS rating from reviewers comments when a pull request is merged, posts a comment with the reward link, and applies a label to the pull request if specified
+
+> [!IMPORTANT]
+> By default, the XPS value is 0, it must be overridden at the final review stage by adding a comment in the review in the format `XPS=N`, where `N` is a positive integer from 0 to `<xps_max>`, if the value is 0, no reward is given
+
 **.github/workflows/reward.yaml**
 ```yaml
 name: Reward
@@ -86,17 +97,28 @@ jobs:
   reward:
     name: Reward
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: the-ton-tech/toolchain/reward@v1
         with:
-          project: blueprint # or sandbox or tl-b 
+          # GitHub token used to read PR details and post comments/labels
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          x_api_key:    ${{ secrets.X_API_KEY }}
-          x_partner_id: ${{ secrets.X_PARTNER_ID }}
+          # Credentials of TON Society Platform
+          society_api_key: ${{ secrets.SOCIETY_API_KEY }}
+          society_partner_id: ${{ secrets.SOCIETY_PARTNER_ID }}
+          # activity identifier or alias: blueprint | sandbox | tl-b | tl-b-tool
+          activity_id: <number_id>
+          # (optional) minimum allowed XPS amount, default: 0
+          xps_min: 0
+          # (optional) maximum allowed XPS amount, default: 15000
+          xps_max: 15000
+          # (optional) label for marking the rewarded PR, default: ''
+          on_reward_label: rewarded
 ```
 
-> [!IMPORTANT]
-> By default, the XPS value is 1000, it must be overridden at the final review stage by adding a comment in the review in the format `XPS=N`, where `N` is a positive integer from 0 to 15000, if the value is 0, no reward is given
+Where `activity_id` is an identifier of the activity, for which user is rewarded, to create a new activity refer to [TON Society Platform documentation](https://github.com/ton-society/sbt-platform?tab=readme-ov-file#steps-for-integration)
 
 ## Development
 
