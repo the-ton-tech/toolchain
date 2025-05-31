@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] – YYYY-MM-DD
+## [1.3.0] - 2025-05-31
 
 - Added calculation average reward action `toolchain/reward` and applies a label to the pull request if specified
 
