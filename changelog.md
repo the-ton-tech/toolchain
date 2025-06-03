@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.0] - 2025-06-03
+
+- Switched to CommonJS format to simplify integration in consumer projects
+
 ## [1.3.0] - 2025-05-31
 
 - Added calculation average reward action `toolchain/reward` and applies a label to the pull request if specified
@@ -15,4 +19,5 @@
 
 ## [1.0.0] - 2025-05-27
 
-First realise
+- Added ESLint and prettier rules
+

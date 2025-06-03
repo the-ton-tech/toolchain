@@ -1,6 +1,8 @@
-import { js, tsEslint, tsParser, importPlugin, prettierPlugin, jestPlugin, globals } from './eslint.mjs';
+const { js, tsEslint, tsParser, importPlugin, prettierPlugin, jestPlugin, globals } = require('./eslint.js');
+
 const nodeGlobals = globals.node;
-export default [
+
+module.exports = [
     { ignores: ['dist/**', '**/dist/**', 'build/**', '**/build/**', 'coverage/**', '**/coverage/**'] },
     {
         languageOptions: {
@@ -61,7 +63,10 @@ export default [
         },
     },
     {
-        plugins: { import: importPlugin, prettier: prettierPlugin },
+        plugins: {
+            import: importPlugin,
+            prettier: prettierPlugin,
+        },
         rules: {
             'no-console': 'warn',
             'prettier/prettier': 'error',
