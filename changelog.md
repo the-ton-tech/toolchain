@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased] – YYYY-MM-DD
+
+- Improvement of the action `toolchain/reward` makes the reward individual and adds a description about the pull request, and also fixes the saving of the reward score
+
 ## [1.4.0] - 2025-06-03
 
 - Switched to CommonJS format to simplify integration in consumer projects

@@ -24,11 +24,11 @@ inputs:
   xps_min:
     description: 'Minimum allowed XPS amount'
     required: false
-    default: 0
+    default: '0'
   xps_max:
     description: 'Maximum allowed XPS amount'
     required: false
-    default: 15000
+    default: '15000'
   on_reward_label:
     description: 'Label for marking the rewarded PR'
     required: false
@@ -103,8 +103,7 @@ runs:
           const user_login = pull_request.user.login;
           // Get PR title and number
           const pr_title = pull_request.title;
-          const pr_number = pull_request.number;
-          const description = `Reward for the Pull Request #${pr_number} titled "${pr_title}"`;
+          const description = `Reward for the Pull Request #${pull_number} titled "${pr_title}"`;
           // Society API Allowlist
           const payload = xps === xps_max ? { description } : { score: xps, description };
           const url = `https://id.ton.org/v1/activities/${activity_id}/allowlist/github-ids/${user_id}`;
