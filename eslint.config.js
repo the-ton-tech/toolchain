@@ -53,6 +53,8 @@ module.exports = [
             '@typescript-eslint/no-explicit-any': 'error',
             'comma-dangle': ['error', 'always-multiline'],
             'arrow-parens': ['error', 'always'],
+            'no-redeclare': 'off',
+            '@typescript-eslint/no-redeclare': ['error'],
         },
     },
     {
