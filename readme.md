@@ -5,20 +5,24 @@ Toolchain for development
 ## Usage
 
 ```bash
-yarn add -D https://github.com/the-ton-tech/toolchain
+yarn add -D @ton/toolchain@the-ton-tech/toolchain#v1
+# or
+npm install -D @ton/toolchain@the-ton-tech/toolchain#v1
 ```
 
-**eslint.config.mjs**
+**eslint.config.js**
 ```js
-export { default } from '@ton/toolchain';
+module.exports = require('@ton/toolchain');
 ```
 
-**custom eslint.config.mjs**
+**custom eslint.config.js**
 ```js
-import base, { tsEslint } from '@ton/toolchain';
+const base = require('@ton/toolchain');
+const tsEslint = require('@ton/toolchain').tsEslint;
 
-export default [
+module.exports = [
   ...base,
+  { ignores: ['example/**'] },
   {
     plugins: {
       '@typescript-eslint': tsEslint,
@@ -26,6 +30,12 @@ export default [
     rules: {
       'no-console': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+  {
+    files: ['src/example1.ts'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
     },
   },
 ];
@@ -36,8 +46,8 @@ export default [
 {
   "prettier": "@ton/toolchain/prettier",
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --max-warnings 0 --fix"
   }
 }
 ```
