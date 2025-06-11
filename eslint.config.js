@@ -3,7 +3,7 @@ const { js, tsEslint, tsParser, importPlugin, prettierPlugin, jestPlugin, global
 const nodeGlobals = globals.node;
 
 module.exports = [
-    { ignores: ['dist/**', '**/dist/**', 'build/**', '**/build/**', 'coverage/**', '**/coverage/**'] },
+    { ignores: ['**/*-auto.*', 'dist/**', '**/dist/**', 'build/**', '**/build/**', 'coverage/**', '**/coverage/**'] },
     {
         languageOptions: {
             globals: nodeGlobals,
@@ -11,8 +11,7 @@ module.exports = [
     },
     js.configs.recommended,
     {
-        files: ['**/*.{ts,mts}'],
-        ignores: ['**/*-auto.*'],
+        files: ['**/*.{ts,tsx,mts}'],
         languageOptions: {
             globals: nodeGlobals,
             parser: tsParser,
