@@ -101,8 +101,12 @@ runs:
           // Get PR author
           const user_id = pull_request.user.id;
           const user_login = pull_request.user.login;
+          // Get PR title and number
+          const pr_title = pull_request.title;
+          const pr_number = pull_request.number;
+          const description = `Reward for the Pull Request #${pr_number} titled "${pr_title}"`;
           // Society API Allowlist
-          const payload = xps === xps_max ? {} : {attributes: [{trait_type: 'xps', value: String(xps)}]};
+          const payload = xps === xps_max ? { description } : { score: xps, description };
           const url = `https://id.ton.org/v1/activities/${activity_id}/allowlist/github-ids/${user_id}`;
           const body = JSON.stringify(payload);
           const response = await fetch(url, {
