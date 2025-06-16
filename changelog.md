@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] – YYYY-MM-DD
+## [1.5.0] - 2025-06-16
 
 - Improvement of the action `toolchain/reward` makes the reward individual and adds a description about the pull request, and also fixes the saving of the reward score
 - Added rule `@typescript-eslint/no-redeclare`
