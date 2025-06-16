@@ -93,6 +93,34 @@ This action extracts the average XPS rating from reviewers comments when a pull 
 
 > [!IMPORTANT]
 > By default, the XPS value is 0, it must be overridden at the final review stage by adding a comment in the review in the format `XPS=N`, where `N` is a positive integer from 0 to `<xps_max>`, if the value is 0, no reward is given
+> 
+> Example: LGTM XPS=15000
+
+#### XPS Behavior Explanation
+
+##### Reward by Approval (`xps_min = 0`)
+
+* XPS is granted **only** if a reviewer explicitly comments `XPS=N`
+* No `XPS` comment → reward = **0**
+* Use this mode when **rewards must be manually assigned**
+
+> Example:
+> `xps_min: 0`, `xps_max: 15000`
+> comment: `XPS=5000` author gets 5000
+> comment: No `XPS` author gets 0
+
+##### Grant with Override (`xps_min == xps_max`)
+
+* Reviewer gets **full reward (XPS = xps_max)** automatically — **unless** someone explicitly sets a lower value with `XPS=N`
+* Setting `XPS=0` **fully cancels** the reward
+* Use this mode when reward is **granted by default**, but reviewers can **downgrade or reject** it
+
+> Example:
+> `xps_min: 15000`, `xps_max: 15000`
+> comment: `XPS=5000` author gets 5000
+> comment: No `XPS` author gets 15000
+
+🔐 Only reviewers with `write`, `maintain`, or `admin` rights can influence scoring
 
 **.github/workflows/reward.yaml**
 ```yaml
@@ -102,6 +130,8 @@ on:
   pull_request:
     types:
       - closed
+    paths:
+      - 'src/**'
 
 jobs:
   reward:
