@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased] – YYYY-MM-DD
+
+- remove `the-ton-tech/toolchain/reward@v1` use instead [ton-society/gh-ton-contribution-reward@v1](https://github.com/ton-society/gh-ton-contribution-reward/tree/v1?tab=readme-ov-file#how-it-works)
+
 ## [1.5.0] - 2025-06-16
 
 - Improvement of the action `toolchain/reward` makes the reward individual and adds a description about the pull request, and also fixes the saving of the reward score
