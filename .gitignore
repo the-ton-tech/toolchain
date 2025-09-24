@@ -1,0 +1,12 @@
+node_modules
+
+# ide
+.idea
+.vscode
+
+# yarn
+yarn-error.log
+.yarn/
+
+# OS
+.DS_Store
