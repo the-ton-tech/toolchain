@@ -4,35 +4,39 @@ inputs:
   node-version:
     description: 'Node.js version'
     default: '22.x'
+  os:
+    description: 'OS name'
+    default: 'ubuntu-latest'
 runs:
   using: 'composite'
   steps:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Enable Corepack
+      if: ${{ startsWith(inputs.os, 'windows') }}
+      shell: bash
+      run: corepack enable --install-directory 'C:\npm\prefix'
+
+    - name: Enable Corepack
+      if: ${{ !startsWith(inputs.os, 'windows') }}
+      shell: bash
+      run: corepack enable
+
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ inputs.node-version }}
-
-    - name: Cache Yarn
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cache/yarn
-          node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+        cache: "yarn"
 
     - name: Install dependencies
       shell: bash
-      run: yarn install --frozen-lockfile
+      run: yarn install --immutable --check-cache --check-resolutions
 
     - name: Run tests
       shell: bash
-      run: yarn test
+      run: yarn run test
 
     - name: Build
       shell: bash
-      run: yarn build
+      run: yarn run build
