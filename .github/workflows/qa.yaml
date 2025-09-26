@@ -14,6 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: the-ton-tech/toolchain/lint@v1
+      - uses: ./lint
         with:
           node-version: 22.x
